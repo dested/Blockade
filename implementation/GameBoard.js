@@ -50,14 +50,13 @@ window.GameBoard = function (game) {
                         backColor :
                         Constants.GamePieces[item].color);
 
-                canvas.fillRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
-                //?                    canvas.strokeRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
-
+                GamePiece.drawPiece(canvas, x, y, item == -1);
+                
             }
         }
 
         if ((this.state == gameState.GameOver && self.gameOverIndex % 2 == 0) //blink when gameover
-            || (this.state==gameState.PieceFalling || this.state==gameState.Landed)) {
+            || (this.state == gameState.PieceFalling || this.state == gameState.Landed)) {
             //current piece
             self.curPiece.draw(canvas, self.pieceLocation);
         }
@@ -125,7 +124,7 @@ window.GameBoard = function (game) {
                     if (self.blockHasCollided()) {
                         self.state = gameState.Landed;
                         self.pieceLocation.y--;
-                    }  
+                    }
 
                     break;
                 case gameState.Landed:
@@ -177,10 +176,10 @@ window.GameBoard = function (game) {
         if (self.state != gameState.PieceFalling) return;
         self.pieceLocation.y++;
 
-        if ( self.blockHasCollided()) {
+        if (self.blockHasCollided()) {
             self.state = gameState.Landed;
             self.pieceLocation.y--;
-        } 
+        }
     };
     self.rotatePiece = function () {
         if (self.state != gameState.PieceFalling) return;

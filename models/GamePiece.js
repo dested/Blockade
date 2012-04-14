@@ -13,8 +13,7 @@ function GamePiece(gamePieceData) {
             for (var y = 0; y < st[x].length; y++) {
                 var item = st[x][y];
                 if (item) {
-                    canvas.fillRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
-                    canvas.strokeRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
+                    GamePiece.drawPiece(canvas, x, y);
                 }
             }
         }
@@ -26,7 +25,7 @@ function GamePiece(gamePieceData) {
     };
 
     this.undoRotate = function () {
-        this.rotateState = ((4+this.rotateState - 1) % 4);
+        this.rotateState = ((4 + this.rotateState - 1) % 4);
     };
 
 
@@ -54,11 +53,58 @@ function GamePiece(gamePieceData) {
             }
         }
         return false;
-        
-
-    }; 
+    };
 }
 
+GamePiece.drawPiece = function (canvas, x, y,empty) {
+    var pieceSize = window.Constants.pieceSize;
+    canvas.save();
+    /*
+    canvas.beginPath();
+    canvas.arc(x * pieceSize + pieceSize / 2, y * pieceSize + pieceSize / 2, pieceSize / 2, 0, Math.PI * 2, true);
+    canvas.closePath();
+    canvas.fill();
+    //    canvas.stroke();
+    */
+
+    canvas.fillRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
+    if (empty) return;
+    canvas.lineWidth = 2;
+    canvas.beginPath();
+    canvas.moveTo(x * pieceSize + 1, y * pieceSize + 1);
+    canvas.lineTo(x * pieceSize + pieceSize - 1, y * pieceSize + 1);
+    canvas.closePath();
+    canvas.strokeStyle = "#999999";
+    canvas.stroke();
+
+    canvas.beginPath();
+    canvas.moveTo(x * pieceSize + pieceSize - 1, y * pieceSize + 1);
+    canvas.lineTo(x * pieceSize + pieceSize - 1, y * pieceSize + pieceSize - 1);
+    canvas.closePath();
+    canvas.strokeStyle = "#494949";
+    canvas.stroke();
+
+    canvas.beginPath();
+    canvas.moveTo(x * pieceSize + pieceSize - 1, y * pieceSize + pieceSize - 1);
+    canvas.lineTo(x * pieceSize + 1, y * pieceSize + pieceSize - 1);
+    canvas.closePath();
+    canvas.strokeStyle = "#353535";
+    canvas.stroke();
+
+    canvas.beginPath();
+    canvas.moveTo(x * pieceSize + 1, y * pieceSize + pieceSize - 1);
+    canvas.lineTo(x * pieceSize + 1, y * pieceSize + 1);
+    canvas.closePath();
+    canvas.strokeStyle = "#B5B5B5";
+    canvas.stroke();
+
+
+
+
+    //canvas.strokeRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
+
+    canvas.restore();
+};
 
 function GamePieceData(index, color, states) {
     this.index = index;
