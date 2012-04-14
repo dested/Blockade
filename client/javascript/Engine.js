@@ -62,6 +62,7 @@ function Engine(gameLayer, uiLayer) {
         e.preventDefault();
         document.body.style.cursor = "default";
         lastMouseMove = e;
+        if (UIManager.onMouseMove(e)) return false;
         if (Manager.onMouseMove(e)) return false;
 
         return false;
@@ -122,10 +123,10 @@ function Engine(gameLayer, uiLayer) {
         self.uiCanvasItem.attr("width", self.canvasWidth);
         self.uiCanvasItem.attr("height", self.canvasHeight);
 
-        this.gameCanvas.width = gameSize.w;
-        this.gameCanvas.height = gameSize.h;
-        this.uiCanvas.width = self.canvasWidth;
-        this.uiCanvas.height = self.canvasHeight;
+        self.gameCanvas.width = gameSize.w;
+        self.gameCanvas.height = gameSize.h;
+        self.uiCanvas.width = self.canvasWidth;
+        self.uiCanvas.height = self.canvasHeight;
 
         self.uiCanvas.goodWidth = self.canvasWidth;
         self.gameCanvas.goodWidth = gameSize.w;
