@@ -18,7 +18,7 @@
                 var head = document.getElementsByTagName('head')[0];
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
-                script.src = url + "?" + (Math.floor(Math.random() * 10000)); //caching
+                script.src = url;// +"?" + (Math.floor(Math.random() * 10000)); //caching
                 if (callback) {
                     script.onreadystatechange = function () {
                         if (this.readyState == 'loaded') callback();

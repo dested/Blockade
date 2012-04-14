@@ -19,7 +19,7 @@ window.GameBoard = function (game) {
         self.curPiece = game.getPiece(self.pieceIndex);
         self.pieceLocation = { x: 4, y: 0 };
         self.board = [];
-        self.gameOverIndex = -1;
+        self.gameOverIndex = undefined;
 
         for (var x = 0; x < window.Constants.boardSize.w; x++) {
             self.board[x] = [];
@@ -44,7 +44,7 @@ window.GameBoard = function (game) {
             for (var y = 0; y < self.board[x].length; y++) {
                 var item = self.board[x][y];
 
-                canvas.fillStyle = (self.gameOverIndex > -1 && y > self.gameOverIndex)
+                canvas.fillStyle = (self.gameOverIndex != undefined && y > self.gameOverIndex)
                     ? gameOverColor
                     : (item == -1 ?
                         backColor :
@@ -56,8 +56,11 @@ window.GameBoard = function (game) {
             }
         }
 
-        //current piece
-        self.curPiece.draw(canvas, self.pieceLocation);
+        if ((this.state == gameState.GameOver && self.gameOverIndex % 2 == 0) //blink when gameover
+            || (this.state==gameState.PieceFalling || this.state==gameState.Landed)) {
+            //current piece
+            self.curPiece.draw(canvas, self.pieceLocation);
+        }
 
         canvas.restore();
     };
@@ -112,7 +115,7 @@ window.GameBoard = function (game) {
                     break;
                 case gameState.GameOver:
                     self.gameOverIndex--;
-                    if (self.gameOverIndex == -1) {
+                    if (self.gameOverIndex == -2) {
                         self.state = gameState.Start;
                     }
                     break;
