@@ -7,7 +7,7 @@ window.GameBoard = function (game) {
         Start: 3
     };
 
-    var ticksPerMove = 4;
+    var ticksPerMove = 9;
 
     self.game = game;
     var gameOverColor = "green";
@@ -65,11 +65,11 @@ window.GameBoard = function (game) {
 
     self.blockHasCollided = function () {
         return self.curPiece.whereBlock(function (x, y) {
-            if (self.pieceLocation.y + y == Constants.boardSize.h) {
-                self.state = gameState.Landed;
+            if (self.pieceLocation.y + y == Constants.boardSize.h || (x + self.pieceLocation.x < 0 || x + self.pieceLocation.x >= Constants.boardSize.w)) {
                 return true;
-            } if (self.board[x + self.pieceLocation.x][y + self.pieceLocation.y] != -1) {
-                self.state = gameState.Landed;
+            }
+
+            if (self.board[x + self.pieceLocation.x][y + self.pieceLocation.y] != -1) {
                 return true;
             }
 
@@ -78,7 +78,7 @@ window.GameBoard = function (game) {
     };
     self.fullLines = function () {
         var lines = [];
-        for (var y = self.board[0].length-1; y >= 0; y--) {
+        for (var y = self.board[0].length - 1; y >= 0; y--) {
             var clear = true;
             for (var x = 0; x < self.board.length; x++) {
                 var item = self.board[x][y];
@@ -120,8 +120,9 @@ window.GameBoard = function (game) {
                     self.pieceLocation.y++;
 
                     if (self.blockHasCollided()) {
+                        self.state = gameState.Landed;
                         self.pieceLocation.y--;
-                    }
+                    }  
 
                     break;
                 case gameState.Landed:
@@ -140,6 +141,7 @@ window.GameBoard = function (game) {
         }
     };
     self.movePieceLeft = function () {
+        if (self.state != gameState.PieceFalling) return;
         if (!self.curPiece.whereBlock(function (x, y) {
 
             if (self.pieceLocation.x + x - 1 < 0) {
@@ -154,6 +156,7 @@ window.GameBoard = function (game) {
         }
     };
     self.movePieceRight = function () {
+        if (self.state != gameState.PieceFalling) return;
         if (!self.curPiece.whereBlock(function (x, y) {
             if (self.pieceLocation.x + x + 1 == Constants.boardSize.w) {
                 return true;
@@ -168,14 +171,20 @@ window.GameBoard = function (game) {
         }
     };
     self.movePieceDown = function () {
+        if (self.state != gameState.PieceFalling) return;
         self.pieceLocation.y++;
 
-        if (self.blockHasCollided()) {
+        if ( self.blockHasCollided()) {
+            self.state = gameState.Landed;
             self.pieceLocation.y--;
-        }
+        } 
     };
     self.rotatePiece = function () {
+        if (self.state != gameState.PieceFalling) return;
         self.curPiece.rotate();
+        if (self.blockHasCollided()) {
+            self.curPiece.undoRotate();
+        }
     };
 
 };

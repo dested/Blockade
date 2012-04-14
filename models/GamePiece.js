@@ -24,6 +24,12 @@ function GamePiece(gamePieceData) {
     this.rotate = function () {
         this.rotateState = ((this.rotateState + 1) % 4);
     };
+
+    this.undoRotate = function () {
+        this.rotateState = ((4+this.rotateState - 1) % 4);
+    };
+
+
     this.forEachBlock = function (callback) {
         var st = this.states[this.rotateState];
 
