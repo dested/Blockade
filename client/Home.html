@@ -1,0 +1,78 @@
+﻿<!DOCTYPE >
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta name="viewport" content="width = device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
+    <title>Our Sonic</title>
+    <script src="lib/jquery.js" type="text/javascript">
+    </script>
+    <script src="lib/linq.js?1" type="text/javascript"> 
+    </script>
+    <script src="javascript/WorkerConsole.js?1" type="text/javascript"> 
+    </script>
+    <script src="javascript/FunctionWorker.js?1" type="text/javascript"> 
+    </script>
+    <script src="lib/Stats.js?1" type="text/javascript"> 
+    </script>
+    <script src="lib/keyboardjs.js?1" type="text/javascript"> 
+    </script>
+    <script src="javascript/Help.js?1" type="text/javascript"> 
+    </script>
+    <script src="javascript/UIManager.js?1" type="text/javascript"> 
+    </script>
+    <script src="javascript/Engine.js?1" type="text/javascript"> 
+    </script>
+    <script src="javascript/UIArea.js?1" type="text/javascript"> 
+    </script>
+    <script src="javascript/UserInterfaces/ModifyTilePieceArea.js?1" type="text/javascript"> 
+    </script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+        $(function () {
+            window.Worker = new FunctionWorker("javascript/FunctionWorker.js");
+            /* fWorker.threadedFunction(
+            function (e) {//start - in thread
+            var j = 4 + 4;
+            for (var a = 1; a < 1000; a++) {
+            for (var i = 1; i < 2000000; i++) {
+            j += i * 20;
+            }
+            for (var i = 1; i < 2000000; i++) {
+            j -= i / 20;
+            }
+            if (a % 10 == 0) {
+            e.callback(j);
+            e.data = j;
+            }
+            }
+            }, function (e) {//finish - not in thread
+            $("body").append("<div>Finished: " + e.data + "</div>");
+
+
+            }, function (e) {//callback - not in thread
+            $("body").append("<div>Callback Data: " + e.data + "</div>");
+
+            }
+            );*/
+
+            var stats = new xStats;
+            document.body.appendChild(stats.element);
+
+            var myCanv = new Engine("gameLayer", "uiLayer");
+
+
+        }); 
+        
+ 
+   
+    //]]>
+        
+    </script>
+</head>
+<body style="background-color: #000080;">
+    <canvas id="gameLayer" style="margin: 0px; position: absolute; top: 0px; left: 0px;
+        z-index: 0;"></canvas>
+    <canvas id="uiLayer" style="margin: 0px; position: absolute; top: 0px; left: 0px;
+        z-index: 0;"></canvas>
+</body>
+</html>
