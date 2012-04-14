@@ -1,4 +1,7 @@
 window.GameBoard = function () {
+    
+    
+
     this.draw = function (canvas) {
         canvas.save();
         

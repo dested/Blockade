@@ -19,6 +19,31 @@ window.requestAnimFrame = (function (ff) {
 function Engine(gameLayer, uiLayer) {
     var self = this;
     window.Engine = this;
+
+
+    window.Engine.socket = io.connect('http://localhost:1337');
+
+    window.Engine.socket.on('Area_Main_LoginResult', function (data) {
+        if (data.access) {
+            alert('allowed');
+        } else {
+            alert('disallowed');
+        }
+    });
+    window.Engine.socket.on('Area_Lobby_ListRoomsResult', function (data) {
+        console.log(data);
+    });
+    window.Engine.socket.on('Area_Room_RecieveChat', function (data) {
+        console.log(data);
+    });
+    window.Engine.socket.on('Area_Room_GameStarted', function (data) {
+        console.log(data);
+    });
+    window.Engine.socket.on('Area_Room_PiecePlaced', function (data) {
+        console.log(data);
+    });
+    
+
     var gameSize = { w: 400, h: 500 };
     this.gameCanvasItem = $("#" + gameLayer);
     this.gameCanvas = document.getElementById(gameLayer).getContext("2d");

@@ -6,6 +6,7 @@
     </script>
     <script src="client/lib/linq.js?1" type="text/javascript"> 
     </script>
+    <script type="text/javascript" src="client/lib/socket.io.js"></script>
     <script src="client/javascript/WorkerConsole.js?1" type="text/javascript"> 
     </script>
     <script src="client/javascript/FunctionWorker.js?1" type="text/javascript"> 
@@ -31,7 +32,7 @@
     <script type="text/javascript">
     //<![CDATA[
 
-        $(function () {
+        $(function () { 
             window.Worker = new FunctionWorker("client/javascript/FunctionWorker.js");
             /* fWorker.threadedFunction(
             function (e) {//start - in thread
