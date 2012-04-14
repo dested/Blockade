@@ -1,26 +1,28 @@
 ﻿
 
 function Manager(mainCanvas, resize) {
+    var self = this;
+    
     Engine.canvasWidth = $(window).width();
     Engine.canvasHeight = $(window).height();
     window.Manager = this;
-
     this.mainCanvas = mainCanvas;
-
     this.forceResize = resize;
-
     this.tickCount = 0;
     this.drawTickCount = 0;
 
 
+    self.gameBoard = new GameBoard();
 
-    var self = this; //internetexplorer doesnt take a this param in setinterval
+
     this.tick = function () {
         if (self.loading) return;
 
         self.tickCount++;
         try {
-            //main game tick
+            if (self.gameBoard) {
+                self.gameBoard.tick();
+            }
         }
         catch (exc) {
             var txt = "There was an error on this page.\n\n";
@@ -48,6 +50,10 @@ function Manager(mainCanvas, resize) {
         _H.save(canvas);
 
         this.drawTickCount++;
+
+        if (self.gameBoard) {
+            self.gameBoard.draw(canvas);
+        }
 
         _H.restore(canvas);
 

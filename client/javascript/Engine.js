@@ -26,6 +26,7 @@ function Engine(gameLayer, uiLayer) {
     this.uiCanvasItem = $("#" + uiLayer);
     this.uiCanvas = document.getElementById(uiLayer).getContext("2d");
 
+    
     this.canvasWidth = 0;
     this.canvasHeight = 0;
 
@@ -121,10 +122,15 @@ function Engine(gameLayer, uiLayer) {
         self.uiCanvasItem.attr("width", self.canvasWidth);
         self.uiCanvasItem.attr("height", self.canvasHeight);
 
+        this.gameCanvas.width = gameSize.w;
+        this.gameCanvas.height = gameSize.h;
+        this.uiCanvas.width = self.canvasWidth;
+        this.uiCanvas.height = self.canvasHeight;
+
         self.uiCanvas.goodWidth = self.canvasWidth;
         self.gameCanvas.goodWidth = gameSize.w;
 
-        var screenOffset = { x: _H.floor(self.canvasWidth / 4), y: _H.floor(self.canvasWidth / 4) };
+        var screenOffset = { x: _H.floor(self.canvasWidth / 2 - gameSize.w / 2), y: _H.floor(self.canvasHeight / 2 - gameSize.h/ 2) };
 
         self.gameCanvasItem.css("left", screenOffset.x + "px");
         self.gameCanvasItem.css("top", screenOffset.y + "px");
