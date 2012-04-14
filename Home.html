@@ -2,37 +2,67 @@
 <head runat="server">
     <meta name="viewport" content="width = device-width, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, user-scalable = no" />
     <title>Blockade</title>
-    <script src="client/lib/jquery.js" type="text/javascript">
-    </script>
-    <script src="client/lib/linq.js?1" type="text/javascript"> 
-    </script>
-    <script type="text/javascript" src="client/lib/socket.io.js"></script>
-    <script src="client/javascript/WorkerConsole.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/javascript/FunctionWorker.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/lib/Stats.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/lib/keyboardjs.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/javascript/Help.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/javascript/UIManager.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/javascript/Engine.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/javascript/Manager.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/javascript/UIArea.js?1" type="text/javascript"> 
-    </script>
-    <script src="implementation/GameBoard.js?1" type="text/javascript"> 
-    </script>
-    <script src="client/javascript/UserInterfaces/genericArea.js?1" type="text/javascript"> 
-    </script>
+    
+    <script type="text/javascript" src="client/lib/jquery.js"></script>
     <script type="text/javascript">
     //<![CDATA[
 
-        $(function () { 
+        /**
+        *
+        *  Chainable external javascript file loading
+        *  http://www.webtoolkit.info/
+        *
+        **/
+        var scriptLoader = {
+            _loadScript: function (url, callback) {
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = url + "?" + (Math.floor(Math.random() * 10000)); //caching
+                if (callback) {
+                    script.onreadystatechange = function () {
+                        if (this.readyState == 'loaded') callback();
+                    };
+                    script.onload = callback;
+                }
+                head.appendChild(script);
+            },
+
+            load: function (items, done) {
+                var counter = 0;
+                for (var i = 0; i < items.length; i++) {
+                    scriptLoader._loadScript(items[i], function () {
+                        counter++;
+                        if (counter >= items.length) {
+                            done();
+                        }
+                    });
+                }
+            }
+        };
+
+
+
+        scriptLoader.load([ 
+                'client/lib/linq.js',
+                'client/lib/socket.io.js',
+                'client/javascript/WorkerConsole.js',
+                'client/javascript/FunctionWorker.js',
+                'client/lib/Stats.js',
+                'client/lib/keyboardjs.js',
+                'client/javascript/Help.js',
+                'client/javascript/UIManager.js',
+                'models/GamePiece.js',
+                'implementation/Game.js',
+                'implementation/GameBoard.js',
+                'implementation/Constants.js',
+
+                'client/javascript/Engine.js',
+                'client/javascript/Manager.js',
+                'client/javascript/UIArea.js',
+                'client/javascript/UserInterfaces/genericArea.js',
+            ], ready);
+        function ready() {
             window.Worker = new FunctionWorker("client/javascript/FunctionWorker.js");
             /* fWorker.threadedFunction(
             function (e) {//start - in thread
@@ -64,9 +94,8 @@
 
             var myCanv = new Engine("gameLayer", "uiLayer");
 
-
-        }); 
-        
+        }
+         
  
    
     //]]>

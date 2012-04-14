@@ -25,6 +25,7 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('Area_Main_Login', function (data) {
         var verified = false;
+        data.user = data.user.toLowerCase();
         if (data.user == "dested" || data.user == "kenny") {
             verified = true;
         }

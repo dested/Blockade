@@ -42,9 +42,9 @@ function Engine(gameLayer, uiLayer) {
     window.Engine.socket.on('Area_Room_PiecePlaced', function (data) {
         console.log(data);
     });
-    
 
-    var gameSize = { w: 400, h: 500 };
+
+    var gameSize = { w: window.Constants.boardSize.w * window.Constants.pieceSize, h: window.Constants.boardSize.h * window.Constants.pieceSize };
     this.gameCanvasItem = $("#" + gameLayer);
     this.gameCanvas = document.getElementById(gameLayer).getContext("2d");
 
@@ -116,19 +116,23 @@ function Engine(gameLayer, uiLayer) {
 
 
     KeyboardJS.bind.key("up", function () {
+        Manager.game.gameBoard.rotatePiece();
 
     }, function () {
     });
 
     KeyboardJS.bind.key("down", function () {
+        Manager.game.gameBoard.movePieceDown();
     }, function () {
     });
 
     KeyboardJS.bind.key("left", function () {
+        Manager.game.gameBoard.movePieceLeft();
     }, function () {
     });
 
     KeyboardJS.bind.key("right", function () {
+        Manager.game.gameBoard.movePieceRight();
 
     }, function () {
 

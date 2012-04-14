@@ -12,7 +12,7 @@ function Manager(mainCanvas, resize) {
     this.drawTickCount = 0;
 
 
-    self.gameBoard = new GameBoard();
+    self.game= new Game();
 
 
     this.tick = function () {
@@ -20,8 +20,8 @@ function Manager(mainCanvas, resize) {
 
         self.tickCount++;
         try {
-            if (self.gameBoard) {
-                self.gameBoard.tick();
+            if (self.game) {
+                self.game.tick();
             }
         }
         catch (exc) {
@@ -51,8 +51,8 @@ function Manager(mainCanvas, resize) {
 
         this.drawTickCount++;
 
-        if (self.gameBoard) {
-            self.gameBoard.draw(canvas);
+        if (self.game) {
+            self.game.draw(canvas);
         }
 
         _H.restore(canvas);
