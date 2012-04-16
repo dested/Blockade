@@ -13,7 +13,14 @@ function GamePiece(gamePieceData) {
             for (var y = 0; y < st[x].length; y++) {
                 var item = st[x][y];
                 if (item) {
-                    GamePiece.drawPiece(canvas, x, y);
+                    var top, right, bottom, left;
+
+                    right = (x + 1 < st.length) ? st[x + 1][y] == 0 : true;
+                    left = (x - 1 >= 0) ? st[x - 1][y] == 0 : true;
+                    bottom = (y + 1 < st[0].length) ? st[x][y + 1] == 0 : true;
+                    top = (y - 1 >= 0) ? st[x][y - 1] == 0 : true;
+
+                    GamePiece.drawPiece(canvas, x, y, item == -1, top, right, bottom, left);
                 }
             }
         }
@@ -56,8 +63,9 @@ function GamePiece(gamePieceData) {
     };
 }
 
-GamePiece.drawPiece = function (canvas, x, y,empty) {
+GamePiece.drawPiece = function (canvas, x, y, empty, top, right, bottom, left) {
     var pieceSize = window.Constants.pieceSize;
+    if (empty) return;
     canvas.save();
     /*
     canvas.beginPath();
@@ -68,37 +76,65 @@ GamePiece.drawPiece = function (canvas, x, y,empty) {
     */
 
     canvas.fillRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
-    if (empty) return;
-    canvas.lineWidth = 2;
+
+    //canvas.fillStyle = _H.Lighten(canvas.fillStyle, 0);
+    //var j = .15;
+    //canvas.fillRect(x * pieceSize + pieceSize * j, y * pieceSize + pieceSize * j, pieceSize - pieceSize * j*2, pieceSize-pieceSize * j*2);
+    var ld = 0;
+    if (top) {
+        canvas.strokeStyle = "#BBBBBB";
+        canvas.lineWidth = 4;
+    } else {
+        canvas.strokeStyle = "#BBBBBB";
+        canvas.lineWidth = 1;
+    }
     canvas.beginPath();
-    canvas.moveTo(x * pieceSize + 1, y * pieceSize + 1);
-    canvas.lineTo(x * pieceSize + pieceSize - 1, y * pieceSize + 1);
+    canvas.moveTo(x * pieceSize - ld, y * pieceSize - ld);
+    canvas.lineTo(x * pieceSize + pieceSize + ld, y * pieceSize - ld);
     canvas.closePath();
-    canvas.strokeStyle = "#999999";
     canvas.stroke();
 
-    canvas.beginPath();
-    canvas.moveTo(x * pieceSize + pieceSize - 1, y * pieceSize + 1);
-    canvas.lineTo(x * pieceSize + pieceSize - 1, y * pieceSize + pieceSize - 1);
-    canvas.closePath();
-    canvas.strokeStyle = "#494949";
-    canvas.stroke();
+    if (right) {
+        canvas.strokeStyle = "#555555";
+        canvas.lineWidth = 4;
+    } else {
+        canvas.strokeStyle = "#555555";
+        canvas.lineWidth =1;
+    }
 
     canvas.beginPath();
-    canvas.moveTo(x * pieceSize + pieceSize - 1, y * pieceSize + pieceSize - 1);
-    canvas.lineTo(x * pieceSize + 1, y * pieceSize + pieceSize - 1);
+    canvas.moveTo(x * pieceSize + pieceSize + ld, y * pieceSize - ld);
+    canvas.lineTo(x * pieceSize + pieceSize + ld, y * pieceSize + pieceSize + ld);
+    canvas.closePath();
+    canvas.stroke();
+
+    if (bottom) {
+        canvas.strokeStyle = "#353535";
+        canvas.lineWidth = 4;
+    } else {
+        canvas.strokeStyle = "#353535";
+        canvas.lineWidth = 1;
+    }
+
+    canvas.beginPath();
+    canvas.moveTo(x * pieceSize + pieceSize + ld, y * pieceSize + pieceSize + ld);
+    canvas.lineTo(x * pieceSize - ld, y * pieceSize + pieceSize + ld);
     canvas.closePath();
     canvas.strokeStyle = "#353535";
     canvas.stroke();
 
+    if (left) {
+        canvas.strokeStyle = "#B5B5B5";
+        canvas.lineWidth = 4;
+    } else {
+        canvas.strokeStyle = "#B5B5B5";
+        canvas.lineWidth = 1;
+    }
     canvas.beginPath();
-    canvas.moveTo(x * pieceSize + 1, y * pieceSize + pieceSize - 1);
-    canvas.lineTo(x * pieceSize + 1, y * pieceSize + 1);
+    canvas.moveTo(x * pieceSize - ld, y * pieceSize + pieceSize + ld);
+    canvas.lineTo(x * pieceSize - ld, y * pieceSize - ld);
     canvas.closePath();
-    canvas.strokeStyle = "#B5B5B5";
     canvas.stroke();
-
-
 
 
     //canvas.strokeRect(x * pieceSize, y * pieceSize, pieceSize, pieceSize);

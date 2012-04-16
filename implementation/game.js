@@ -1,17 +1,30 @@
 function Game() {
-    var self = this; 
-    this.getPiece = function (pieceIndex) {
+    var self = this;
+    self.getPiece = function (pieceIndex) {
         //poll for piece index if need new pieces? new pieces get pushed when ready?
         return new GamePiece(Constants.GamePieces[Math.floor(Constants.GamePieces.length * Math.random())]);
 
     };
-    this.draw = function (canvas) {
-        self.gameBoard.draw(canvas);
+    self.draw = function (canvas) {
+        self.playerGameBoard.draw(canvas);
     };
-    this.tick = function () {
-        self.gameBoard.tick();
-    }; 
-    
+    self.tick = function () {
+        self.playerGameBoard.tick();
+    };
 
-    self.gameBoard = new GameBoard(this);
+
+    self.movePieceLeft = function () {
+        self.playerGameBoard.movePieceLeft();
+    };
+    self.movePieceRight = function () {
+        self.playerGameBoard.movePieceRight();
+    };
+    self.movePieceDown = function () {
+        self.playerGameBoard.movePieceDown();
+    };
+    self.rotatePiece = function () {
+        self.playerGameBoard.rotatePiece();
+    };
+    self.enemyGameBoards = [];
+    self.playerGameBoard = new GameBoard(self);
 }

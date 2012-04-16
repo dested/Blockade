@@ -1,4 +1,4 @@
-window.GameBoard = function (game) {
+window.GameBoard = function (game, playerID) {
     var self = this;
     var gameState = {
         PieceFalling: 0,
@@ -6,7 +6,7 @@ window.GameBoard = function (game) {
         GameOver: 2,
         Start: 3
     };
-
+    self.playerID = playerID;
     var ticksPerMove = 9;
 
     self.game = game;
@@ -50,8 +50,15 @@ window.GameBoard = function (game) {
                         backColor :
                         Constants.GamePieces[item].color);
 
-                GamePiece.drawPiece(canvas, x, y, item == -1);
-                
+                var st = self.board;
+                var top, right, bottom, left;
+
+                right = (x + 1 < st.length) ? st[x + 1][y] == -1 : true;
+                left = (x - 1 >= 0) ? st[x - 1][y] == -1 : true;
+                bottom = (y + 1 < st[0].length) ? st[x][y + 1] == -1 : true;
+                top = (y - 1 >= 0) ? st[x][y - 1] == -1 : true;
+                GamePiece.drawPiece(canvas, x, y, item == -1, top, right, bottom, left);
+
             }
         }
 
@@ -142,7 +149,8 @@ window.GameBoard = function (game) {
             }
         }
     };
-    self.movePieceLeft = function () {
+    self.movePieceLeft = function () { 
+        
         if (self.state != gameState.PieceFalling) return;
         if (!self.curPiece.whereBlock(function (x, y) {
 

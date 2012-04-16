@@ -27,8 +27,17 @@
         }
 
         return last;
-    }, 
-    mod: function (j,n) {
+    },
+    Lighten: function (inColor, inAmount) {
+        if (inColor.r == undefined) {
+            inColor = { r: parseInt(inColor.substr(1, 2), 16), g: parseInt(inColor.substr(3, 2), 16), b: parseInt(inColor.substr(5, 2), 16) };
+        }
+        return "#" +
+            Math.min(255, inColor.r + 255 * inAmount).toString(16) +
+                Math.min(255, inColor.g + 255 * inAmount).toString(16) +
+                    Math.min(255, inColor.b + 255 * inAmount).toString(16);
+    },
+    mod: function (j, n) {
         return ((j % n) + n) % n;
     },
     floor: function (f) {

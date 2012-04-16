@@ -23,23 +23,36 @@ function Engine(gameLayer, uiLayer) {
 
     window.Engine.socket = io.connect('http://localhost:1337');
 
-    window.Engine.socket.on('Area_Main_LoginResult', function (data) {
+    window.Engine.socket.on('Area.Main.LoginResult', function (data) {
         if (data.access) {
             alert('allowed');
+            window.Engine.socket.emit('Area.Lobby.ListRooms', {});
         } else {
             alert('disallowed');
         }
     });
-    window.Engine.socket.on('Area_Lobby_ListRoomsResult', function (data) {
+    window.Engine.socket.on('Area.Lobby.ListRoomsResult', function (rooms) {
+        for (var i = 0; i < rooms.length; i++) {
+
+            UIManager.genericArea.roomList.addControl(new Button(0, 0, 0, 0, rooms[i].name + " (" + rooms[i].players.length + "/" + rooms[i].maxUsers + ")", "10pt Arial", "rgb(50,190,90)", (function (room) {
+                return function () {
+                    window.Engine.socket.emit('Area.Lobby.JoinRoom', room); 
+                };
+            })(rooms[i])));
+        }
+        console.log(rooms);
+    });
+    window.Engine.socket.on('Area.Lobby.JoinRoomResult', function (room) {
+        alert(_H.stringify(room));
+
+    });
+    window.Engine.socket.on('Area.Room.RecieveChat', function (data) {
         console.log(data);
     });
-    window.Engine.socket.on('Area_Room_RecieveChat', function (data) {
+    window.Engine.socket.on('Area.Room.GameStarted', function (data) {
         console.log(data);
     });
-    window.Engine.socket.on('Area_Room_GameStarted', function (data) {
-        console.log(data);
-    });
-    window.Engine.socket.on('Area_Room_PiecePlaced', function (data) {
+    window.Engine.socket.on('Area.Room.PiecePlaced', function (data) {
         console.log(data);
     });
 
@@ -51,7 +64,7 @@ function Engine(gameLayer, uiLayer) {
     this.uiCanvasItem = $("#" + uiLayer);
     this.uiCanvas = document.getElementById(uiLayer).getContext("2d");
 
-    
+
     this.canvasWidth = 0;
     this.canvasHeight = 0;
 
@@ -116,23 +129,23 @@ function Engine(gameLayer, uiLayer) {
 
 
     KeyboardJS.bind.key("up", function () {
-        Manager.game.gameBoard.rotatePiece();
+        Manager.game.rotatePiece();
 
     }, function () {
     });
 
     KeyboardJS.bind.key("down", function () {
-        Manager.game.gameBoard.movePieceDown();
+        Manager.game.movePieceDown();
     }, function () {
     });
 
     KeyboardJS.bind.key("left", function () {
-        Manager.game.gameBoard.movePieceLeft();
+        Manager.game.movePieceLeft();
     }, function () {
     });
 
     KeyboardJS.bind.key("right", function () {
-        Manager.game.gameBoard.movePieceRight();
+        Manager.game.movePieceRight();
 
     }, function () {
 
@@ -160,7 +173,7 @@ function Engine(gameLayer, uiLayer) {
         self.uiCanvas.goodWidth = self.canvasWidth;
         self.gameCanvas.goodWidth = gameSize.w;
 
-        var screenOffset = { x: _H.floor(self.canvasWidth / 2 - gameSize.w / 2), y: _H.floor(self.canvasHeight / 2 - gameSize.h/ 2) };
+        var screenOffset = { x: _H.floor(self.canvasWidth / 2 - gameSize.w / 2), y: _H.floor(self.canvasHeight / 2 - gameSize.h / 2) };
 
         self.gameCanvasItem.css("left", screenOffset.x + "px");
         self.gameCanvasItem.css("top", screenOffset.y + "px");

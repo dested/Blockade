@@ -19,28 +19,42 @@ function handler(req, res) {
     res.end();
 }
 
+var rooms = [];
+rooms.push({ name: "main room", maxUsers: 10, roomID:0,players:[] });//make a model
+
 io.sockets.on('connection', function (socket) {
-
-
-
-    socket.on('Area_Main_Login', function (data) {
+    socket.on('Area.Main.Login', function (data) {
         var verified = false;
         data.user = data.user.toLowerCase();
         if (data.user == "dested" || data.user == "kenny") {
             verified = true;
+            socket.player = { name: data.user }; //to model
         }
-        socket.emit('Area_Main_LoginResult', { access: verified });
+        socket.emit('Area.Main.LoginResult', { access: verified });
     });
-    socket.on('Area_Lobby_ListRooms', function (data) {
+    socket.on('Area.Lobby.ListRooms', function (data) {
+        socket.emit('Area.Lobby.ListRoomsResult', rooms);
+    });
+    socket.on('Area.Lobby.JoinRoom', function (data) {
+        for (var i = 0; i < rooms.length; i++) {
+            if (rooms[i].name == data.name) {
+                if (rooms[i].players.length >= rooms[i].maxUsers) {
+                    socket.emit('Area.Lobby.JoinRoomResult', { error: "full" }); //to model
+                } 
+                rooms[i].players.push(socket.player);
+
+                socket.emit('Area.Lobby.JoinRoomResult', rooms[i]); //to model
+            }
+        }
+        socket.emit('Area.Lobby.JoinRoomResult', { error: "not found" }); //to model
+    });
+    socket.on('Area.Room.SendChat', function (data) {
         console.log(data);
     });
-    socket.on('Area_Room_SendChat', function (data) {
+    socket.on('Area.Room.StartGame', function (data) {
         console.log(data);
     });
-    socket.on('Area_Room_StartGame', function (data) {
-        console.log(data);
-    });
-    socket.on('Area_Room_PlacePiece', function (data) {
+    socket.on('Area.Room.PlacePiece', function (data) {
         console.log(data);
     });
 });
