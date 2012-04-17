@@ -80,7 +80,7 @@ GamePiece.drawPiece = function (canvas, x, y, empty, top, right, bottom, left) {
     //canvas.fillStyle = _H.Lighten(canvas.fillStyle, 0);
     //var j = .15;
     //canvas.fillRect(x * pieceSize + pieceSize * j, y * pieceSize + pieceSize * j, pieceSize - pieceSize * j*2, pieceSize-pieceSize * j*2);
-    var ld = 0;
+    var ld = 0; //Offset
     if (top) {
         canvas.strokeStyle = "#BBBBBB";
         canvas.lineWidth = 4;
