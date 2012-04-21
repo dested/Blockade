@@ -88,7 +88,7 @@ GamePiece.drawPiece = function (canvas, x, y, empty, top, right, bottom, left) {
         canvas.strokeStyle = "#BBBBBB";
         canvas.lineWidth = 1;
     }
-    canvas.beginPath();
+    canvas.beginPath(); 
     canvas.moveTo(x * pieceSize - ld, y * pieceSize - ld);
     canvas.lineTo(x * pieceSize + pieceSize + ld, y * pieceSize - ld);
     canvas.closePath();
